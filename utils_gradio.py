@@ -34,9 +34,9 @@ ROLE1 = "ASSISTANT"
 processor = None
 model = None
 
-system_prompt = """You are a helpful, respectful and honest assistant. Always answer as helpfully as possible, while being safe.  Your answers should not include any harmful, unethical, racist, sexist, toxic, dangerous, or illegal content. Please ensure that your responses are socially unbiased and positive in nature.
-If a question does not make any sense, or is not factually coherent, explain why instead of answering something not correct. If you don't know the answer to a question, please don't share false information."""
-# system_prompt = ""
+#system_prompt = """You are a helpful, respectful and honest assistant. Always answer as helpfully as possible, while being safe.  Your answers should not include any harmful, unethical, racist, sexist, toxic, dangerous, or illegal content. Please ensure that your responses are socially unbiased and positive in nature.
+#If a question does not make any sense, or is not factually coherent, explain why instead of answering something not correct. If you don't know the answer to a question, please don't share false information."""
+system_prompt = ""
 # system_prompt ="""A chat between a curious human and an artificial intelligence assistant. The assistant gives helpful, detailed, and polite answers to the human's questions."""
 
 title_markdown = ("""
@@ -87,7 +87,7 @@ def add_text(state, text, image, image_process_mode):
 
     prompt_len = 0
     # prompt=f"[INST] {system_prompt} [/INST]\n\n" if system_prompt else ""
-    if processor.tokenizer.chat_template is not None:
+    if False:
         prompt = processor.tokenizer.apply_chat_template(
             [{"role": "user", "content": "<image>\n" + text}],
             tokenize=False,
@@ -98,14 +98,14 @@ def add_text(state, text, image, image_process_mode):
         prompt = system_prompt
         prompt_len += len(prompt)
         if image is not None:
-            msg = f"\n{ROLE0}: <image>\n{text}\n{ROLE1}:" # Ignore <image> token when calculating prompt length\     
+            msg = f"[INST] <image>\n{text}\n[/INST]" # Ignore <image> token when calculating prompt length\     
         else:
             msg = f"\n{ROLE0}: {text}\n{ROLE1}: "
         prompt += msg
         prompt_len += len(msg)
 
-    state.messages.append([ROLE0,  (text, image, image_process_mode)])
-    state.messages.append([ROLE1, None])
+    #state.messages.append([ROLE0,  (text, image, image_process_mode)])
+    #state.messages.append([ROLE1, None])
 
     state.prompt_len = prompt_len
     state.prompt = prompt

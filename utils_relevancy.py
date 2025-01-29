@@ -9,7 +9,6 @@ import torch.distributed as dist
 from torch import nn
 import torch.nn.functional as F
 
-from transformers.deepspeed import is_deepspeed_zero3_enabled
 from transformers.utils import  logging
 from transformers.generation.beam_constraints import DisjunctiveConstraint, PhrasalConstraint
 from transformers.generation.beam_search import  BeamSearchScorer, ConstrainedBeamSearchScorer
@@ -64,7 +63,7 @@ def handle_self_attention_image(R_i_i, enc_attn_weights, privious_cam=[]):
         assert cam.shape == R_i_i.shape, "The attention weights and the relevancy map are not the same size"
         R_i_i += torch.matmul(cam, R_i_i)
         del grad, cam
-        # torch.cuda.empty_cache()
+        torch.cuda.empty_cache()
 
     return R_i_i, privious_cam
 

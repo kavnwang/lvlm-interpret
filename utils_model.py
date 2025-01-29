@@ -5,11 +5,11 @@ from io import BytesIO
 from PIL import Image
 import torch
 # from torchvision.transforms.functional import to_pil_image
-from transformers import LlavaForConditionalGeneration, AutoProcessor
+from transformers import LlavaForConditionalGeneration, AutoProcessor, LlavaNextProcessor, LlavaNextForConditionalGeneration
 from transformers import BitsAndBytesConfig
 
 func_to_enable_grad = '_sample'
-setattr(LlavaForConditionalGeneration, func_to_enable_grad, torch.enable_grad(getattr(LlavaForConditionalGeneration, func_to_enable_grad)))
+setattr(LlavaNextForConditionalGeneration, func_to_enable_grad, torch.enable_grad(getattr(LlavaNextForConditionalGeneration, func_to_enable_grad)))
 
 try:
     import intel_extension_for_pytorch as ipex
@@ -36,7 +36,7 @@ def get_processor_model(args):
     else:
         quant_config = None
 
-    model = LlavaForConditionalGeneration.from_pretrained(
+    model = LlavaNextForConditionalGeneration.from_pretrained(
         args.model_name_or_path, torch_dtype=torch.bfloat16, 
         quantization_config=quant_config, low_cpu_mem_usage=True, device_map="auto"
     )
