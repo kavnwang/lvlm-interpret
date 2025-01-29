@@ -104,8 +104,8 @@ def add_text(state, text, image, image_process_mode):
         prompt += msg
         prompt_len += len(msg)
 
-    #state.messages.append([ROLE0,  (text, image, image_process_mode)])
-    #state.messages.append([ROLE1, None])
+    state.messages.append([ROLE0,  (text, image, image_process_mode)])
+    state.messages.append([ROLE1, None])
 
     state.prompt_len = prompt_len
     state.prompt = prompt
@@ -200,6 +200,7 @@ def lvlm_bot(state, temperature, top_p, max_new_tokens):
     img_std = torch.tensor(processor.image_processor.image_std).view(3,1,1)
     img_mean = torch.tensor(processor.image_processor.image_mean).view(3,1,1)
     img_recover = inputs.pixel_values[0].cpu() * img_std + img_mean
+    img_recover = img_recover[0]
     img_recover = to_pil_image(img_recover)
 
     state.recovered_image = img_recover
